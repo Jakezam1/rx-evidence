@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RxEvidence Finding",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "id",
+      "category",
+      "title",
+      "summary",
+      "clinicalImplication",
+      "statistics",
+      "confidenceLevel",
+      "sourcePassages"
+    ],
+    "properties": {
+      "id": { "type": "string" },
+      "category": {
+        "type": "string",
+        "enum": [
+          "primary_outcome",
+          "secondary_outcome",
+          "population",
+          "methods",
+          "bias",
+          "safety",
+          "generalizability",
+          "context"
+        ]
+      },
+      "title": { "type": "string", "minLength": 3, "maxLength": 120 },
+      "summary": { "type": "string" },
+      "clinicalImplication": { "type": "string" },
+      "statistics": { "type": "object" },
+      "confidenceLevel": { "type": "string", "enum": ["high", "moderate", "low"] },
+      "sourcePassages": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 3,
+        "items": {
+          "type": "object",
+          "required": ["text", "sectionName", "pageHint"],
+          "properties": {
+            "text": { "type": "string" },
+            "sectionName": { "type": "string" },
+            "pageHint": { "type": "string" },
+            "paragraphHint": { "type": "string" },
+            "anchorType": { "type": "string", "enum": ["verbatim", "paraphrase"] },
+            "anchorMatchScore": { "type": "number" }
+          }
+        }
+      }
+    }
+  }
+}
