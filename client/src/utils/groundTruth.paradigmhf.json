@@ -1,0 +1,155 @@
+[
+  {
+    "caseId": "gt-001-population-randomized",
+    "category": "population",
+    "quote": "Accordingly, 4187 patients were randomly assigned to receive LCZ696 and 4212 to receive enalapril for the intention-to-treat analysis",
+    "page": 7,
+    "region": "right middle",
+    "section": ["Results", "Study Patients"],
+    "type": "body"
+  },
+  {
+    "caseId": "gt-002-primary-composite-endpoint",
+    "category": "primary_outcome",
+    "quote": "Death from cardiovascular causes or hospitalization for heart failure (the primary end point) occurred in 914 patients (21.8%) in the LCZ696 group and 1117 patients (26.5%) in the enalapril group (hazard ratio in the LCZ696 group, 0.80;95% confidence interval [CI], 0.73 to 0.87; P<0.001",
+    "page": 9,
+    "region": "left middle",
+    "section": ["Results", "Study Outcomes"],
+    "type": "body"
+  },
+  {
+    "caseId": "gt-003-primary-all-cause-mortality",
+    "category": "primary_outcome",
+    "quote": "A total of 711 patients (17.0%) in the LCZ696 group and 835 patients (19.8%) in the enalapril group died (hazard ratio for death from any cause, 0.84; 95% CI, 0.76 to 0.93; P<0.001)",
+    "page": 9,
+    "region": "lower left",
+    "section": ["Results", "Study Outcomes"],
+    "type": "body"
+  },
+  {
+    "caseId": "gt-004-secondary-kccq-change",
+    "category": "secondary_outcome",
+    "quote": "The mean change from baseline to month 8 in the KCCQ clinical summary score was a reduction of 2.99 points in the LCZ696 group and a reduction of 4.63 points in the enalapril group (between-group difference, 1.64 points; 95% CI, 0.63 to 2.65; P=0.001).",
+    "page": 9,
+    "region": ["lower left", "upper right"],
+    "section": ["Results", "Study Outcomes"],
+    "type": "body"
+  },
+  {
+    "caseId": "gt-005-secondary-symptomatic-hypotension",
+    "category": "secondary_outcome",
+    "quote": "After randomization, patients in the LCZ696 group were more likely than those in the enalapril group to have symptomatic hypotension, but these events rarely required the discontinuation of treatment (Table 3)",
+    "page": 9,
+    "region": "right middle",
+    "section": ["Results", "Safety"],
+    "type": "body"
+  },
+  {
+    "caseId": "gt-006-population-exclusion-criteria",
+    "category": "population",
+    "quote": "Exclusion criteria included symptomatic hypotension, a systolic blood pressure of less than 100 mm Hg at screening or 95 mm Hg at randomization, an estimated glomerular filtration rate (eGFR) below 30 ml per minute per 1.73 m2 of body-surface area at screening or at randomization or a decrease in the eGFR of more than 25% (which was amended to 35%) between screening and randomization, a serum potassium level of more than 5.2 mmol per liter at screening (or above 5.4 mmol per liter at randomization), or a history of angioedema or unacceptable side effects during receipt of ACE inhibitors or ARBs.",
+    "page": [2, 3],
+    "region": ["bottom right", "bottom left", "bottom right"],
+    "section": ["Methods", "Study Patients"],
+    "type": "body"
+  },
+  {
+    "caseId": "gt-007-safety-drug-discontinuations",
+    "category": "safety",
+    "quote": "Except for discontinuations owing to death, the study drug was discontinued in 746 patients (17.8%) receiving LCZ696 and 833 patients (19.8%) receiving enalapril (P=0.02)",
+    "page": 7,
+    "region": "bottom right",
+    "section": ["Results", "Study-Drug Administration and Follow-Up"],
+    "type": "body"
+  },
+  {
+    "caseId": "gt-008-safety-runin-withdrawals",
+    "category": "safety",
+    "quote": "During the run-in period, 12.0% of the patients withdrew because of an adverse event (most frequently cough, hyperkalemia, renal dysfunction, or hypotension), with a higher rate of withdrawal after adjustment for the shorter duration of treatment in the enalapril group than in the LCZ696 group.",
+    "page": 9,
+    "region": "middle right",
+    "section": ["Results", "Safety"],
+    "type": "body"
+  },
+  {
+    "caseId": "gt-009-bias-figure1-runin-withdrawal-caption",
+    "category": "bias",
+    "quote": "The proportion of patients who withdrew from the study because of adverse events was higher during the enalapril run-in period than during the LCZ696 run-in period after adjustment for the longer duration of LCZ696 exposure",
+    "page": 3,
+    "region": "lower third",
+    "section": ["Figure 1 caption"],
+    "type": "figure_caption"
+  },
+  {
+    "caseId": "gt-010-methods-abstract-randomization",
+    "category": "methods",
+    "quote": "In this double-blind trial, we randomly assigned 8442 patients with class II, III, or IV heart failure and an ejection fraction of 40% or less to receive either LCZ696 (at a dose of 200 mg twice daily) or enalapril (at a dose of 10 mg twice daily), in addition to recommended therapy.",
+    "page": 1,
+    "region": "middle",
+    "section": ["Abstract", "Methods"],
+    "type": "body"
+  },
+  {
+    "caseId": "gt-011-methods-figure1-discontinued-study-block",
+    "category": "methods",
+    "quote": "1102 Discontinued study 591 (5.6%) Had adverse event 66 (0.6%) Had abnormal laboratory or other test result 171 (1.6%) Withdrew consent 138 (1.3%) Had protocol deviation, had administrative problem, or were lost to follow-up 49 (0.5%) Died 87 (0.8%) Had other reasons",
+    "page": 3,
+    "region": "top",
+    "section": ["Figure 1"],
+    "type": "figure_text"
+  },
+  {
+    "caseId": "gt-012-population-table1-demographics-rows",
+    "category": "population",
+    "quote": "Age — yr 63.8±11.5 63.8±11.3 Female sex — no. (%) 879 (21.0) 953 (22.6) Race or ethnic group — no. (%)† White 2763 (66.0) 2781 (66.0) Black 213 (5.1) 215 (5.1) Asian 759 (18.1) 750 (17.8) Other 452 (10.8) 466 (11.1)",
+    "page": 4,
+    "region": "top third",
+    "section": ["Table 1"],
+    "type": "table_1"
+  },
+  {
+    "caseId": "gt-013-primary-table2-primary-composite-rows",
+    "category": "primary_outcome",
+    "quote": "Primary composite outcome — no. (%) Death from cardiovascular causes or first hospitalization for worsening heart failure 914 (21.8) 1117 (26.5) 0.80 (0.73–0.87) <0.001 Death from cardiovascular causes 558 (13.3) 693 (16.5) 0.80 (0.71–0.89) <0.001 First hospitalization for worsening heart failure 537 (12.8) 658 (15.6) 0.79 (0.71–0.89) <0.001",
+    "page": 7,
+    "region": "top",
+    "section": ["Table 2"],
+    "type": "table_rows"
+  },
+  {
+    "caseId": "gt-014-context-abstract-background-comparator",
+    "category": "context",
+    "quote": "We compared the angiotensin receptor–neprilysin inhibitor LCZ696 with enalapril in patients who had heart failure with a reduced ejection fraction. In previous studies, enalapril improved survival in such patients.",
+    "page": 1,
+    "region": "top",
+    "section": ["Abstract", "Background"],
+    "type": "body"
+  },
+  {
+    "caseId": "gt-015-context-abstract-conclusion-funding",
+    "category": "context",
+    "quote": "LCZ696 was superior to enalapril in reducing the risks of death and of hospitalization for heart failure. (Funded by Novartis; PARADIGM-HF ClinicalTrials.gov number, NCT01035255.)",
+    "page": 1,
+    "region": "bottom",
+    "section": ["Abstract", "Conclusion"],
+    "type": "body"
+  },
+  {
+    "caseId": "gt-016-context-figure3-subgroup-text",
+    "category": "context",
+    "quote": "Shown are hazard ratios for the primary end point (death from cardiovascular causes or first hospitalization for heart failure) and for death from cardiovascular causes among patients in prespecified subgroups. The size of the square corresponds to the number of patients in each subgroup.",
+    "page": 9,
+    "region": "top left",
+    "section": ["Figure 3 text"],
+    "type": "figure_text"
+  },
+  {
+    "caseId": "gt-017-context-short-quote-multi-page-ambiguous",
+    "category": "context",
+    "quote": "A total of 711 patients (17.0%)",
+    "page": [1, 9],
+    "region": ["middle", "left middle"],
+    "section": ["Abstract", "Results", "Study Outcomes"],
+    "type": "body"
+  }
+]
