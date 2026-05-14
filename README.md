@@ -107,6 +107,21 @@ npm run dev
 
 ---
 
+## Deploy on Render (API + web + Postgres)
+
+This repo includes a **`render.yaml`** Blueprint so you can run the **FastAPI** app, **Next.js** app, and a **free Postgres** instance in one Render project.
+
+1. Push this repository to GitHub (if it is not already).
+2. In [Render](https://dashboard.render.com): **New → Blueprint** → connect the repo → leave the default path `render.yaml` → apply.
+3. When prompted, paste **`GEMINI_API_KEY`** (or switch `LLM_PROVIDER` and keys on the API service after deploy—see `api/.env.example`).
+4. Wait for all three resources to go **Live**. Open the **web** URL (for example `https://rx-evidence-web.onrender.com`).
+
+**URLs:** The Next build expects the API at **`https://rx-evidence-api.onrender.com`**. That matches the API service name `rx-evidence-api` in `render.yaml`. If you rename the API service in Render, set **`NEXT_PUBLIC_API_BASE_URL`** on the web service to the new API URL and **redeploy the web service** so the client bundle rebuilds.
+
+**Free tier behavior:** Web services **spin down after idle** (cold start on the next visit). Render’s **free Postgres** databases are **time-limited**; upgrade or export data before they expire. Uploaded PDFs live on **ephemeral disk** unless you add a paid disk—fine for demos, not for long-term storage.
+
+---
+
 ## Config (the short version)
 
 Copy `api/.env.example` to `api/.env`, then set:
