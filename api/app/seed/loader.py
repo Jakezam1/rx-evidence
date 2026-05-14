@@ -10,13 +10,12 @@ from __future__ import annotations
 import json
 import logging
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 from sqlalchemy.orm import Session
 
-from app.api.routes.papers import set_pdf_bytes
 from app.db import models
 from app.seed.constants import BUNDLED_DEMO_PAPER_ID
 
@@ -31,9 +30,14 @@ def _coerce_dt(value: Any) -> datetime | None:
     if value is None or value == "":
         return None
     if isinstance(value, datetime):
+        if value.tzinfo is None:
+            return value.replace(tzinfo=timezone.utc)
         return value
     s = str(value).replace(" ", "T", 1)
-    return datetime.fromisoformat(s)
+    dt = datetime.fromisoformat(s)
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt
 
 
 def _maybe_json(value: Any) -> Any:
@@ -170,6 +174,9 @@ def seed_demo_paper_if_configured(db: Session) -> None:
             )
 
         pdf_bytes = _PDF_PATH.read_bytes()
+        # Defer import so this module does not import papers at load time (avoids cycles).
+        from app.api.routes.papers import set_pdf_bytes
+
         set_pdf_bytes(BUNDLED_DEMO_PAPER_ID, pdf_bytes)
 
         db.commit()

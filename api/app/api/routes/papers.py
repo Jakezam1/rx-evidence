@@ -143,6 +143,10 @@ def get_demo_paper(db: Session = Depends(get_db)):
     On a fresh deploy the database is empty until someone uploads a PDF; use
     "Analyze a paper" once, or set DEMO_PAPER_ID to a paper UUID in the API env.
     """
+    from app.seed.loader import seed_demo_paper_if_configured
+
+    seed_demo_paper_if_configured(db)
+
     demo_id = os.getenv("DEMO_PAPER_ID", "").strip()
     paper = None
     if demo_id:
@@ -177,6 +181,10 @@ def get_recent_paper(db: Session = Depends(get_db)):
     Used by the 'Try Demo' button on the landing page to load a pre-analyzed
     paper without making the user upload a fresh PDF.
     """
+    from app.seed.loader import seed_demo_paper_if_configured
+
+    seed_demo_paper_if_configured(db)
+
     paper = _latest_paper_for_try_flow(db)
     if paper is None:
         raise HTTPException(
