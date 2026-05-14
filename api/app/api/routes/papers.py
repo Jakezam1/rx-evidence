@@ -15,8 +15,13 @@ from app.services.pdf_extract import extract_pdf_pages
 
 router = APIRouter(prefix="/papers", tags=["papers"])
 
-PDF_CACHE_DIR = Path(os.getenv("PDF_CACHE_DIR", "pdf_cache"))
+# Always resolve cache dir under the `api/` service root so Render (cwd varies) still finds/writes files.
+_API_SERVICE_ROOT = Path(__file__).resolve().parents[3]
+_DEFAULT_PDF_CACHE = _API_SERVICE_ROOT / "pdf_cache"
+PDF_CACHE_DIR = Path(os.getenv("PDF_CACHE_DIR", str(_DEFAULT_PDF_CACHE)))
 PDF_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+
+_SEED_PDF_DIR = _API_SERVICE_ROOT / "app" / "seed"
 
 _IN_MEMORY_PDFS: dict[str, bytes] = {}
 
@@ -26,7 +31,7 @@ def _disk_path(paper_id: str) -> Path:
 
 
 def get_pdf_bytes(paper_id: str) -> Optional[bytes]:
-    """Return cached PDF bytes, falling back to disk if the in-memory cache was cleared."""
+    """Return cached PDF bytes: memory, then disk cache, then bundled seed copy (demo deploys)."""
     cached = _IN_MEMORY_PDFS.get(paper_id)
     if cached:
         return cached
@@ -34,6 +39,15 @@ def get_pdf_bytes(paper_id: str) -> Optional[bytes]:
     if path.exists():
         data = path.read_bytes()
         _IN_MEMORY_PDFS[paper_id] = data
+        return data
+    seed_path = _SEED_PDF_DIR / f"{paper_id}.pdf"
+    if seed_path.is_file():
+        data = seed_path.read_bytes()
+        _IN_MEMORY_PDFS[paper_id] = data
+        try:
+            _disk_path(paper_id).write_bytes(data)
+        except OSError:
+            pass
         return data
     return None
 
