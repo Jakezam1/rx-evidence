@@ -88,6 +88,8 @@ def seed_demo_paper_if_configured(db: Session) -> None:
                     processed_at=_coerce_dt(row.get("processed_at")),
                 )
             )
+        db.flush()  # papers must exist before analysis_runs (FK on Postgres)
+
         for row in tables.get("analysis_runs", []):
             db.add(
                 models.AnalysisRun(
@@ -104,6 +106,8 @@ def seed_demo_paper_if_configured(db: Session) -> None:
                     error_message=row.get("error_message"),
                 )
             )
+        db.flush()  # runs before findings (FK to papers + analysis_runs)
+
         for row in tables.get("findings", []):
             db.add(
                 models.Finding(
@@ -119,10 +123,12 @@ def seed_demo_paper_if_configured(db: Session) -> None:
                     evidence_strength_score=row.get("evidence_strength_score"),
                     review_status=row.get("review_status") or "unreviewed",
                     review_note=row.get("review_note"),
-                    created_at=_coerce_dt(row.get("created_at")) or datetime.now(),
-                    updated_at=_coerce_dt(row.get("updated_at")) or datetime.now(),
+                    created_at=_coerce_dt(row.get("created_at")) or datetime.now(timezone.utc),
+                    updated_at=_coerce_dt(row.get("updated_at")) or datetime.now(timezone.utc),
                 )
             )
+        db.flush()  # findings before finding_sources
+
         for row in tables.get("finding_sources", []):
             db.add(
                 models.FindingSource(
@@ -169,7 +175,7 @@ def seed_demo_paper_if_configured(db: Session) -> None:
                     level=row["level"],
                     message=row["message"],
                     metadata_json=_as_dict(row.get("metadata_json")),
-                    created_at=_coerce_dt(row.get("created_at")) or datetime.now(),
+                    created_at=_coerce_dt(row.get("created_at")) or datetime.now(timezone.utc),
                 )
             )
 
