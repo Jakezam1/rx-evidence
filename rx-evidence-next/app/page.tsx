@@ -27,6 +27,21 @@ import { ClinicalSummary, Finding, ObservabilityEvent, Pico, RiskLimitations } f
 
 const POLL_INTERVAL_MS = 1500;
 
+/** Human-readable trial name for the bundled demo (API file name may still be NEJM id). */
+function labelForDemoTrial(fileName: string): string {
+  const stem = fileName.replace(/\.pdf$/i, "").trim();
+  const compact = stem.toLowerCase().replace(/[^a-z0-9]/g, "");
+  if (
+    stem === "NEJMoa1409077" ||
+    compact === "nejmoa1409077" ||
+    compact.includes("paradigmhf") ||
+    compact === "paradigmhf"
+  ) {
+    return "Paradigm HF trial";
+  }
+  return `${stem} trial`;
+}
+
 type TabKey = "findings" | "pico" | "risk" | "summary";
 type ViewKey = "landing" | "workspace";
 type Palette = "a" | "b";
@@ -194,8 +209,7 @@ export default function Home() {
       const demo = await getDemoPaper();
       setPaperId(demo.paperId);
       setPaperFileName(demo.fileName);
-      const trialName = demo.fileName.replace(/\.pdf$/i, "");
-      setDemoLabel(`${trialName} trial`);
+      setDemoLabel(labelForDemoTrial(demo.fileName));
       await refreshPaperData(demo.paperId);
     } catch (err) {
       setError(
