@@ -18,13 +18,13 @@ from sqlalchemy.orm import Session
 
 from app.api.routes.papers import set_pdf_bytes
 from app.db import models
+from app.seed.constants import BUNDLED_DEMO_PAPER_ID
 
 logger = logging.getLogger(__name__)
 
 _SEED_DIR = Path(__file__).resolve().parent
 _BUNDLE_PATH = _SEED_DIR / "demo_bundle.json"
-_DEMO_PAPER_ID = "e793e16f-5016-47ba-83fb-5d123c896a9c"
-_PDF_PATH = _SEED_DIR / f"{_DEMO_PAPER_ID}.pdf"
+_PDF_PATH = _SEED_DIR / f"{BUNDLED_DEMO_PAPER_ID}.pdf"
 
 
 def _coerce_dt(value: Any) -> datetime | None:
@@ -66,7 +66,7 @@ def seed_demo_paper_if_configured(db: Session) -> None:
     if not _BUNDLE_PATH.is_file() or not _PDF_PATH.is_file():
         logger.warning("Demo seed skipped: missing %s or %s", _BUNDLE_PATH, _PDF_PATH)
         return
-    if db.query(models.Paper).filter(models.Paper.id == _DEMO_PAPER_ID).first():
+    if db.query(models.Paper).filter(models.Paper.id == BUNDLED_DEMO_PAPER_ID).first():
         return
 
     raw = json.loads(_BUNDLE_PATH.read_text(encoding="utf-8"))
@@ -170,10 +170,10 @@ def seed_demo_paper_if_configured(db: Session) -> None:
             )
 
         pdf_bytes = _PDF_PATH.read_bytes()
-        set_pdf_bytes(_DEMO_PAPER_ID, pdf_bytes)
+        set_pdf_bytes(BUNDLED_DEMO_PAPER_ID, pdf_bytes)
 
         db.commit()
-        logger.info("Seeded demo paper %s (%d findings)", _DEMO_PAPER_ID, len(tables.get("findings", [])))
+        logger.info("Seeded demo paper %s (%d findings)", BUNDLED_DEMO_PAPER_ID, len(tables.get("findings", [])))
     except Exception:
         db.rollback()
         logger.exception("Demo seed failed; database left unchanged")

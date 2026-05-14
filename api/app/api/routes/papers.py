@@ -8,9 +8,12 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from fastapi.responses import Response
 from sqlalchemy.orm import Session
 
+from importlib.resources import files
+
 from app.db import models
 from app.db.session import get_db
 from app.schemas.api_contracts import PaperUploadResponse
+from app.seed.constants import BUNDLED_DEMO_PAPER_ID
 from app.services.pdf_extract import extract_pdf_pages
 
 router = APIRouter(prefix="/papers", tags=["papers"])
@@ -21,13 +24,29 @@ _DEFAULT_PDF_CACHE = _API_SERVICE_ROOT / "pdf_cache"
 PDF_CACHE_DIR = Path(os.getenv("PDF_CACHE_DIR", str(_DEFAULT_PDF_CACHE)))
 PDF_CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
-_SEED_PDF_DIR = _API_SERVICE_ROOT / "app" / "seed"
-
 _IN_MEMORY_PDFS: dict[str, bytes] = {}
 
 
 def _disk_path(paper_id: str) -> Path:
     return PDF_CACHE_DIR / f"{paper_id}.pdf"
+
+
+_SEED_RESOURCE_ROOT = "app.seed"
+
+
+def _read_bundled_seed_pdf(paper_id: str) -> Optional[bytes]:
+    """Load PDF shipped inside the app.seed package (survives Render cwd / layout quirks)."""
+    try:
+        root = files(_SEED_RESOURCE_ROOT)
+    except (ModuleNotFoundError, FileNotFoundError, ValueError, TypeError):
+        return None
+    for name in (f"{paper_id}.pdf", "NEJMoa1409077.pdf"):
+        if name == "NEJMoa1409077.pdf" and paper_id != BUNDLED_DEMO_PAPER_ID:
+            continue
+        ref = root.joinpath(name)
+        if ref.is_file():
+            return ref.read_bytes()
+    return None
 
 
 def get_pdf_bytes(paper_id: str) -> Optional[bytes]:
@@ -40,15 +59,14 @@ def get_pdf_bytes(paper_id: str) -> Optional[bytes]:
         data = path.read_bytes()
         _IN_MEMORY_PDFS[paper_id] = data
         return data
-    seed_path = _SEED_PDF_DIR / f"{paper_id}.pdf"
-    if seed_path.is_file():
-        data = seed_path.read_bytes()
-        _IN_MEMORY_PDFS[paper_id] = data
+    bundled = _read_bundled_seed_pdf(paper_id)
+    if bundled is not None:
+        _IN_MEMORY_PDFS[paper_id] = bundled
         try:
-            _disk_path(paper_id).write_bytes(data)
+            _disk_path(paper_id).write_bytes(bundled)
         except OSError:
             pass
-        return data
+        return bundled
     return None
 
 
@@ -181,7 +199,13 @@ def get_paper_pdf(paper_id: str):
     """Stream the cached PDF bytes for inline rendering in the UI."""
     data = get_pdf_bytes(paper_id)
     if data is None:
-        raise HTTPException(status_code=404, detail="PDF bytes not cached for this paper.")
+        hint = ""
+        if paper_id == BUNDLED_DEMO_PAPER_ID:
+            hint = (
+                " This is the bundled demo paper: confirm the latest commit is deployed "
+                "(api/app/seed/*.pdf in the repo) and DEMO_PAPER_ID matches the bundled id."
+            )
+        raise HTTPException(status_code=404, detail=f"PDF bytes not cached for this paper.{hint}")
     return Response(
         content=data,
         media_type="application/pdf",

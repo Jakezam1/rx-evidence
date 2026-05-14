@@ -122,6 +122,8 @@ This repo includes a **`render.yaml`** Blueprint so you can run the **FastAPI** 
 
 **“Try the demo”:** On first boot the API **loads a bundled, pre-analyzed** PARADIGM-HF trial (`NEJMoa1409077.pdf`) into the database and PDF cache when **`AUTO_SEED_DEMO`** is left at its default (`true`). `render.yaml` sets **`DEMO_PAPER_ID`** to that paper’s UUID so the demo always opens the same completed run. Set **`AUTO_SEED_DEMO=false`** if you do not want that behavior. (The PDF is NEJM-copyrighted material—use only in line with your own publishing/hosting rules.)
 
+If the UI shows **“PDF bytes not cached”** on Render: redeploy the **API** from a commit that includes **`api/app/seed/*.pdf`**, run `git ls-files api/app/seed` locally to confirm those files are tracked, and check the API service’s **`DEMO_PAPER_ID`** matches **`api/app/seed/constants.py`** (or remove it so the app falls back to the latest completed paper).
+
 ---
 
 ## Config (the short version)
