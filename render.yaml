@@ -30,6 +30,8 @@ services:
         value: gemini
       - key: GEMINI_API_KEY
         sync: false
+      - key: DEMO_PAPER_ID
+        value: e793e16f-5016-47ba-83fb-5d123c896a9c
 
   - type: web
     name: rx-evidence-web

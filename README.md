@@ -120,6 +120,8 @@ This repo includes a **`render.yaml`** Blueprint so you can run the **FastAPI** 
 
 **Free tier behavior:** Web services **spin down after idle** (cold start on the next visit). Render’s **free Postgres** databases are **time-limited**; upgrade or export data before they expire. Uploaded PDFs live on **ephemeral disk** unless you add a paid disk—fine for demos, not for long-term storage.
 
+**“Try the demo”:** On first boot the API **loads a bundled, pre-analyzed** PARADIGM-HF trial (`NEJMoa1409077.pdf`) into the database and PDF cache when **`AUTO_SEED_DEMO`** is left at its default (`true`). `render.yaml` sets **`DEMO_PAPER_ID`** to that paper’s UUID so the demo always opens the same completed run. Set **`AUTO_SEED_DEMO=false`** if you do not want that behavior. (The PDF is NEJM-copyrighted material—use only in line with your own publishing/hosting rules.)
+
 ---
 
 ## Config (the short version)

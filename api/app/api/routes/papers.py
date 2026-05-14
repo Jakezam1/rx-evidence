@@ -63,6 +63,19 @@ class _InMemoryShim(dict):
 IN_MEMORY_PDFS = _InMemoryShim()
 
 
+def _latest_paper_for_try_flow(db: Session) -> Optional[models.Paper]:
+    """Prefer a finished analysis; otherwise newest upload (same rules as /papers/recent)."""
+    paper = (
+        db.query(models.Paper)
+        .filter(models.Paper.status.in_(("completed", "analyzed")))
+        .order_by(models.Paper.processed_at.desc().nullslast(), models.Paper.uploaded_at.desc())
+        .first()
+    )
+    if paper is None:
+        paper = db.query(models.Paper).order_by(models.Paper.uploaded_at.desc()).first()
+    return paper
+
+
 @router.post("", response_model=PaperUploadResponse)
 async def upload_paper(file: UploadFile = File(...), db: Session = Depends(get_db)):
     if file.content_type != "application/pdf":
@@ -93,10 +106,10 @@ async def upload_paper(file: UploadFile = File(...), db: Session = Depends(get_d
 
 @router.get("/demo")
 def get_demo_paper(db: Session = Depends(get_db)):
-    """Return the paper pinned via the DEMO_PAPER_ID environment variable.
+    """Return the paper pinned via DEMO_PAPER_ID, or the same fallback as /papers/recent.
 
-    Falls back to the most recently analyzed paper if DEMO_PAPER_ID is unset
-    so local dev still works without manual configuration.
+    On a fresh deploy the database is empty until someone uploads a PDF; use
+    "Analyze a paper" once, or set DEMO_PAPER_ID to a paper UUID in the API env.
     """
     demo_id = os.getenv("DEMO_PAPER_ID", "").strip()
     paper = None
@@ -108,16 +121,11 @@ def get_demo_paper(db: Session = Depends(get_db)):
                 detail=f"DEMO_PAPER_ID is set to {demo_id} but no paper with that id exists.",
             )
     else:
-        paper = (
-            db.query(models.Paper)
-            .filter(models.Paper.status.in_(("completed", "analyzed")))
-            .order_by(models.Paper.processed_at.desc().nullslast(), models.Paper.uploaded_at.desc())
-            .first()
-        )
+        paper = _latest_paper_for_try_flow(db)
         if paper is None:
             raise HTTPException(
                 status_code=404,
-                detail="No demo paper configured. Set DEMO_PAPER_ID in api/.env or upload and analyze a paper.",
+                detail="No papers yet. Use “Analyze a paper” on the home page first, or set DEMO_PAPER_ID in the API environment to a paper UUID.",
             )
 
     return {
@@ -137,20 +145,12 @@ def get_recent_paper(db: Session = Depends(get_db)):
     Used by the 'Try Demo' button on the landing page to load a pre-analyzed
     paper without making the user upload a fresh PDF.
     """
-    paper = (
-        db.query(models.Paper)
-        .filter(models.Paper.status.in_(("completed", "analyzed")))
-        .order_by(models.Paper.processed_at.desc().nullslast(), models.Paper.uploaded_at.desc())
-        .first()
-    )
+    paper = _latest_paper_for_try_flow(db)
     if paper is None:
-        paper = (
-            db.query(models.Paper)
-            .order_by(models.Paper.uploaded_at.desc())
-            .first()
+        raise HTTPException(
+            status_code=404,
+            detail="No papers yet. Use “Analyze a paper” on the home page first, or set DEMO_PAPER_ID in the API environment to a paper UUID.",
         )
-    if paper is None:
-        raise HTTPException(status_code=404, detail="No papers available. Upload and analyze one first.")
 
     return {
         "paperId": paper.id,

@@ -200,7 +200,7 @@ export default function Home() {
     } catch (err) {
       setError(
         err instanceof Error
-          ? `${err.message} If you're seeing this in dev, set DEMO_PAPER_ID in rx-evidence/api/.env, restart the backend, then try again.`
+          ? `${err.message} On a new server there are no papers yet—use “Analyze a paper” first, or set DEMO_PAPER_ID in the API environment to pin a paper UUID.`
           : "Failed to load demo paper",
       );
     } finally {
